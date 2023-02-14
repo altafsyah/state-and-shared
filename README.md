@@ -1,16 +1,13 @@
 # state_shared
 
-A new Flutter project.
+Repository buat belajar state management pakai BLoC dan seputar develop mobile apps pakai Flutter. 
 
-## Getting Started
+# Baca yang di bawah :
 
-This project is a starting point for a Flutter application.
+Setelah pull repository ini, jalankan command :
 
-A few resources to get you started if this is your first Flutter project:
+```flutter
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Kalau udah, baru bisa lanjut develop app ini.
