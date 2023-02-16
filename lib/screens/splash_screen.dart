@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:state_shared/helper/shared_preferences.dart';
+import 'package:state_shared/screens/home_screen.dart';
 import 'package:state_shared/screens/login_screen.dart';
 import 'package:state_shared/screens/onboarding_screen.dart';
 
@@ -31,9 +32,15 @@ class _SplashScreenState extends State<SplashScreen> {
   Future isOnboarding() async {
     print('matep;');
     bool? isOnboardingSeen = await getOnboardingSeen();
+    int? userToken = await getToken();
     if (isOnboardingSeen != null && isOnboardingSeen) {
-      Navigator.of(context)
-          .pushAndRemoveUntil(_pageTransition(LoginScreen()), (route) => false);
+      if (userToken != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            _pageTransition(HomeScreen()), (route) => false);
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            _pageTransition(LoginScreen()), (route) => false);
+      }
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           _pageTransition(OnboardingScreen()), (route) => false);

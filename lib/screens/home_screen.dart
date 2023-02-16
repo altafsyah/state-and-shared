@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:state_shared/bloc/resep_bloc.dart';
 import 'package:state_shared/helper/shared_preferences.dart';
+import 'package:state_shared/model/resep_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     // getUsername();
     super.initState();
+    context.read<ResepBloc>().add(ResepEventFetch());
   }
 
   @override
@@ -79,6 +83,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            BlocBuilder<ResepBloc, ResepState>(builder: ((context, state) {
+              if (state is LoadingResepState) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                if (state is ResepState && state.resep != null) {
+                  Resep resep = state.resep!;
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) {
+                        return Text('${resep.data![index].resep}');
+                      }),
+                      itemCount: resep.data!.length,
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Text('Kosong'),
+                  );
+                }
+              }
+            }))
           ],
         ),
       ),
