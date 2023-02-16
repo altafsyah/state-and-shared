@@ -4,8 +4,32 @@ import 'package:state_shared/helper/shared_preferences.dart';
 import 'package:state_shared/screens/home_screen.dart';
 import 'package:state_shared/services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController emailController, passwordController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,72 +66,84 @@ class LoginScreen extends StatelessWidget {
                   height: 40,
                 ),
                 Form(
+                    key: _formKey,
                     child: Column(
-                  children: [
-                    TextFormField(
-                      cursorColor: Color(0xff331609),
-                      style: GoogleFonts.poppins(
-                          fontSize: 20, color: Color(0xff331609)),
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff331609))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff331609))),
-                        hintText: 'Email',
-                        hintStyle: GoogleFonts.poppins(
-                          fontSize: 20,
-                          color: Color(0xff331609).withOpacity(0.5),
+                      children: [
+                        TextFormField(
+                          controller: emailController,
+                          cursorColor: Color(0xff331609),
+                          style: GoogleFonts.poppins(
+                              fontSize: 20, color: Color(0xff331609)),
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff331609))),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff331609))),
+                            hintText: 'Email',
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: 20,
+                              color: Color(0xff331609).withOpacity(0.5),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Color(0xff331609).withOpacity(0.5),
+                            ),
+                          ),
                         ),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Color(0xff331609).withOpacity(0.5),
+                        SizedBox(
+                          height: 40,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    TextFormField(
-                      cursorColor: Color(0xff331609),
-                      style: GoogleFonts.poppins(
-                          fontSize: 20, color: Color(0xff331609)),
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff331609))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff331609))),
-                        hintText: 'Password',
-                        hintStyle: GoogleFonts.poppins(
-                          fontSize: 20,
-                          color: Color(0xff331609).withOpacity(0.5),
+                        TextFormField(
+                          controller: passwordController,
+                          cursorColor: Color(0xff331609),
+                          style: GoogleFonts.poppins(
+                              fontSize: 20, color: Color(0xff331609)),
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff331609))),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff331609))),
+                            hintText: 'Password',
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: 20,
+                              color: Color(0xff331609).withOpacity(0.5),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.password,
+                              color: Color(0xff331609).withOpacity(0.5),
+                            ),
+                            suffixIcon: Icon(
+                              Icons.visibility,
+                              color: Color(0xff331609).withOpacity(0.5),
+                            ),
+                          ),
                         ),
-                        prefixIcon: Icon(
-                          Icons.password,
-                          color: Color(0xff331609).withOpacity(0.5),
-                        ),
-                        suffixIcon: Icon(
-                          Icons.visibility,
-                          color: Color(0xff331609).withOpacity(0.5),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+                      ],
+                    )),
                 SizedBox(
                   height: 50,
                 ),
                 Center(
                   child: GestureDetector(
                     onTap: () async {
-                      AuthService().signIn('John', '1234567').then((value) {
-                        if (value) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                            (route) => false,
-                          );
-                        }
-                      });
+                      if (_formKey.currentState!.validate()) {
+                        AuthService()
+                            .signIn(
+                                emailController.text, passwordController.text)
+                            .then((value) {
+                          if (value) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (route) => false,
+                            );
+                          }
+                        });
+                      }
                     },
                     child: Container(
                       padding:
